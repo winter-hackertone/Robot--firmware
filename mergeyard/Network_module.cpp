@@ -54,6 +54,8 @@ void upload_integrated_data(float temp, float ec, uint8_t *imgBuf,
   jsonPayload += "\"device_id\":\"" + String(device_id) + "\",";
   jsonPayload += "\"temperature\":" + String(temp, 2) + ",";
   jsonPayload += "\"ec_value\":" + String(ec, 2) + ",";
+  jsonPayload +=
+      "\"motor_state\":\"" + getMotorStatus() + "\","; // 모터 상태 추가
   jsonPayload += "\"image_data\":\"" + base64Image + "\",";
   jsonPayload += "\"timestamp\":\"\""; // 타임스탬프는 서버측에서 생성 권장
   jsonPayload += "}";
@@ -96,10 +98,13 @@ void poll_motor_command() {
 
     // 단순 문자열 파싱 (ArduinoJson을 사용하지 않는 경우)
     if (payload.indexOf("\"direction\":\"left\"") > 0) {
-      // 좌측 회전 로직 (DCMotor 모니터링 로직에 따라 구현 필요)
-      // 현재 DCMotor.cpp에는 'INSPECT' 명령만 있으므로, 상황에 맞게 확장 가능
-      startInspection(); // 예시로 INSPECT 시작
+      Serial.println(">> Command: LEFT (Forward Sequence)");
+      startInspection();
+    } else if (payload.indexOf("\"direction\":\"right\"") > 0) {
+      Serial.println(">> Command: RIGHT (Reverse Sequence)");
+      startReverse();
     } else if (payload.indexOf("\"direction\":\"stop\"") > 0) {
+      Serial.println(">> Command: STOP");
       stopInspection();
     }
     // 명세에 맞춰 direction, speed, duration 등을 추가 처리할 수 있습니다.

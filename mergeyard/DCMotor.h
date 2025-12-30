@@ -17,9 +17,12 @@ extern int motorSpeed;
 
 // 함수 선언
 void startInspection();
+void startReverse();
 void stopInspection();
 void updateInspection();
 void sendStatus();
+String getMotorStatus();
+String getMotorStatus();
 
 // 내부 제어 함수지만 project.ino setup()에서 사용하므로 공개
 void stopMotor();

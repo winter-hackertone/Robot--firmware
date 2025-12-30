@@ -12,6 +12,13 @@ void startInspection() {
   Serial.println("{\"type\":\"response\",\"status\":\"started\"}");
 }
 
+void startReverse() {
+  currentState = REVERSE;
+  stateStartTime = millis();
+  reverseMotor();
+  Serial.println("{\"type\":\"response\",\"status\":\"reversing\"}");
+}
+
 void stopInspection() {
   currentState = IDLE;
   stopMotor();

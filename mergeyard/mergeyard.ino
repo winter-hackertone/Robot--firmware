@@ -69,7 +69,7 @@ void loop() {
 
   // 2. 모터 제어 명령 폴링 (서버 제어용)
   static unsigned long lastPollTime = 0;
-  if (millis() - lastPollTime >= 3000) { // 3초마다 폴링
+  if (millis() - lastPollTime >= 1000) { // 1초마다 폴링 (반응성 향상)
     poll_motor_command();
     lastPollTime = millis();
   }

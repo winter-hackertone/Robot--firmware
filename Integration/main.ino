@@ -1,8 +1,8 @@
-#include "../Modules/ArduCAM-OV2640/Camera_module.h" // [Source: ArduCAM]
-#include "../Modules/DCMotor/DCMotor.h"              // [Source: DCMotor]
-#include "../Modules/DS18B20-/Temp_module.h"         // [Source: DS18B20]
-#include "../Modules/EC-sensor/EC_module.h"          // [Source: EC-sensor]
-#include "../Modules/Network/Network_module.h"       // [Source: Network]
+// #include "../Modules/ArduCAM-OV2640/Camera_module.h" // [Source: ArduCAM]
+#include "../Modules/DCMotor/DCMotor.h"      // [Source: DCMotor]
+#include "../Modules/DS18B20-/Temp_module.h" // [Source: DS18B20]
+#include "../Modules/EC-sensor/EC_module.h"  // [Source: EC-sensor]
+// #include "../Modules/Network/Network_module.h"       // [Source: Network]
 
 // 타이머 변수
 unsigned long lastUploadTime = 0;
@@ -19,7 +19,7 @@ void setup() {
   // ----------------------------------------
   // [Source: Network] WiFi 및 네트워크 초기화
   // ----------------------------------------
-  network_init();
+  // network_init();
 
   // ----------------------------------------
   // [Source: EC-sensor] 초기화
@@ -45,7 +45,7 @@ void setup() {
   // [Source: ArduCAM] 카메라 초기화
   // ----------------------------------------
   Serial.println(">> Initializing Camera...");
-  camera_init();
+  // camera_init();
 
   Serial.println("===== [All Systems Ready] =====\n");
 }
@@ -68,10 +68,12 @@ void loop() {
 
   // 2. 모터 제어 명령 폴링 (서버 제어용)
   static unsigned long lastPollTime = 0;
-  if (millis() - lastPollTime >= 3000) { // 3초마다 폴링
-    poll_motor_command();
-    lastPollTime = millis();
-  }
+  /*
+    if (millis() - lastPollTime >= 3000) { // 3초마다 폴링
+      poll_motor_command();
+      lastPollTime = millis();
+    }
+  */
 
   // 3. 각 모듈 상태 업데이트
   updateInspection();
@@ -82,6 +84,12 @@ void loop() {
     float currentTemp = temp_read();
     float currentEC = get_average_ec();
 
+    Serial.print("Temp: ");
+    Serial.print(currentTemp);
+    Serial.print(" C, EC: ");
+    Serial.println(currentEC);
+
+    /*
     // 카메라 프레임 캡처
     uint8_t *imgBuf = NULL;
     size_t imgLen = 0;
@@ -94,6 +102,7 @@ void loop() {
       // 캡처 실패 시 데이터만이라도 업로드 (이미지 없이)
       upload_integrated_data(currentTemp, currentEC, NULL, 0);
     }
+    */
 
     lastUploadTime = millis();
   }
